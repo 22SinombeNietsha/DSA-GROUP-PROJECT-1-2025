@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package car_rental;
+
+// Car message
+message Car {
+  string plate = 1;
+  string make = 2;
+  string model = 3;
+  int32 year = 4;
+  float daily_price = 5;
+  int32 mileage = 6;
+  string status = 7;
+}
+
+// Reservation message
+message Reservation {
+  string customer_id = 1;
+  repeated Car cars = 2;
+  string start_date = 3;
+  string end_date = 4;
+  float total_price = 5;
+}
+
+// User message
+message User {
+  string user_id = 1;
+  string name = 2;
+  string role = 3; // "admin" or "customer"
+}
+
+// Request to search cars
+message CarSearchRequest {
+  string filter = 1; // Filter by make or year
+}
+
+// Car list response
+message CarListResponse {
+  repeated Car cars = 1;
+}
+
+// Add to cart request
+message AddToCartRequest {
+  string customer_id = 1;
+  string car_plate = 2;
+  string start_date = 3;
+  string end_date = 4;
+}
+
+// Response message
+message Response {
+  string message = 1;
+}
+
+// gRPC service definition
+service CarRentalService {
+  // Admin operations
+  rpc add_car(Car) returns (Response);
+  rpc create_users(stream User) returns (Response);
+  rpc update_car(Car) returns (Response);
+  rpc remove_car(Car) returns (CarListResponse);
+
+  // Customer operations
+  rpc list_available_cars(CarSearchRequest) returns (stream Car);
+  rpc search_car(Car) returns (Car);
+  rpc add_to_cart(AddToCartRequest) returns (Response);
+  rpc place_reservation(Reservation) returns (Response);
+}
