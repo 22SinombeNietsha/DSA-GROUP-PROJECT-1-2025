@@ -10,7 +10,7 @@ message Car {
   int32 year = 4;
   float daily_price = 5;
   int32 mileage = 6;
-  string status = 7;
+  string status = 7; // e.g., "AVAILABLE" or "UNAVAILABLE"
 }
 
 // Reservation message
@@ -29,17 +29,17 @@ message User {
   string role = 3; // "admin" or "customer"
 }
 
-// Request to search cars
+// Request to search cars (filter by make or year)
 message CarSearchRequest {
-  string filter = 1; // Filter by make or year
+  string filter = 1;
 }
 
-// Car list response
+// Response for a list of cars
 message CarListResponse {
   repeated Car cars = 1;
 }
 
-// Add to cart request
+// Request to add a car to cart
 message AddToCartRequest {
   string customer_id = 1;
   string car_plate = 2;
@@ -47,12 +47,12 @@ message AddToCartRequest {
   string end_date = 4;
 }
 
-// Response message
+// General response message
 message Response {
   string message = 1;
 }
 
-// gRPC service definition
+// The Car Rental Service definition
 service CarRentalService {
   // Admin operations
   rpc add_car(Car) returns (Response);
@@ -66,3 +66,4 @@ service CarRentalService {
   rpc add_to_cart(AddToCartRequest) returns (Response);
   rpc place_reservation(Reservation) returns (Response);
 }
+
